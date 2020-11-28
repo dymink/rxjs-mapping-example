@@ -1,6 +1,15 @@
 const{ from, zip, timer} = require('rxjs');
 const{ map, mergeMap, switchMap, concatMap, exhaustMap } = require('rxjs/operators');
 
+const operators = {
+    merge: mergeMap,
+    concat: concatMap,
+    switch: switchMap,
+    exhaust: exhaustMap
+}
+
+const operator = operators[process.argv[2]];
+
 const color = {
     red: "\x1b[31m%s\x1b[0m",
     green: '\x1b[32m%s\x1b[0m',
@@ -20,10 +29,7 @@ const colors$ = zip(
   timer(1000, 1000),  
 )
 .pipe(
-    mergeMap(
-    // concatMap(
-    // switchMap(
-    // exhaustMap(
+    operator(
         (val) => numbers$.pipe(
             map(
                 (item) => { return {item, val};}
